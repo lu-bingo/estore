@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace中是映射文件所对应的映射接口的全限定名 -->
+<mapper namespace="com.briup.estore.dao.BookMapper">
+	<!-- 查找前三本书 -->
+
+	<select id="findFrontThreeBook" resultType="book">
+		select * from es_book
+		order by click desc
+		limit 3
+
+	</select>
+
+	<!-- 查找所有的书籍信息 -->
+	<select id="findBookAll" resultType="book">
+		select * from es_book
+	</select>
+
+
+	<select id="findBooks" parameterType="Integer" resultType="book">
+		<!--参数是不是null 根据不同的条件去进行sql语句的拼接 param1 param2 param3.... -->
+		select * from es_book where
+		<choose>
+			<when test="count==null">
+				id &lt; 4
+			</when>
+			<otherwise>
+				id > #{count}-6
+			</otherwise>
+		</choose>
+	</select>
+
+	<!--查找书籍总量 -->
+	<select id="count" resultType="Integer">
+		select count(*) from es_book
+	</select>
+
+	<!--查询最后六本书 -->
+	<!-- <select id="findLastSixBook" parameterType="Integer" resultType="book"> 
+		select * from es_book where id > #{count}-6 </select> -->
+
+	<!-- 根据id查找书籍信息 -->
+	<select id="findBookById" parameterType="Integer"
+		resultType="book">
+		select * from es_book where id = #{id}
+	</select>
+	
+	<!-- 更新书籍信息 -->
+	<update id="updateBook" parameterType="Book">
+		update es_book
+		<set>
+			<if test="name!=null">
+			price=#{price},
+			</if>
+			<if test="author!=null">
+			author=#{author},
+			</if>
+			<if test="publisher!=null">
+			publisher=#{publisher},
+			</if>
+			<if test="pubDate!=null">
+			pubDate=#{pubDate},
+			</if>
+			<if test="description!=null">
+			description=#{description},
+			</if>
+			<if test="image!=null">
+			image=#{image},
+			</if>
+			<if test="click>0">
+				click=#{click},
+			</if>
+		</set>
+			where id=#{id}
+	</update>
+	
+	<!-- 根据栏目id查询书籍 -->
+	<select id="selectBookByCateId" parameterType="int" resultType="Book">
+		select *
+		from es_book
+		where category_id=#{cateId}
+	</select>
+	
+	<!-- 根据栏目 -->
+	<select id="selectBookByCateIdAndClick" parameterType="int" resultType="Book">
+		select * from es_book
+		where category_id=#{cateId}
+		order by click desc limit 3
+	</select>
+
+</mapper>

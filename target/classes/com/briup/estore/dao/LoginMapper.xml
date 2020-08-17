@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace中是映射文件所对应的映射接口的全限定名 -->
+<mapper namespace="com.briup.estore.dao.LoginMapper">
+	<insert id="insertCustomer" parameterType="Customer">
+		insert into es_customer(id,name,password,zipCode,telephone,email)
+		values(#{id},#{name},#{password},#{zipCode},#{telephone},#{email})
+	</insert>
+	
+	<select id="selectCustomerByName" parameterType="String" resultType="Customer">
+		select * from es_customer 
+		where name=#{name}
+	</select>
+</mapper>
